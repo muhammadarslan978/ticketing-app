@@ -15,7 +15,8 @@ import {
 } from '@nestjs/common'
 
 import { UserService } from '../service/user.service'
-import { CreateUserDto } from '../dto/user.dto'
+import { CreateUserDto, LoginDto, ResendOtpDto, VerifyOtpDto } from '../dto/user.dto'
+import { ResendOtpResponse, SigninResponse, SignupResponse, VerifyOtpResponse } from '../user.interface'
 
 @Controller('user')
 export class UserController {
@@ -23,17 +24,25 @@ export class UserController {
 
     @Post('/signup')
     @UsePipes(new ValidationPipe())
-    async signup(@Body() body: CreateUserDto): Promise<any> {
+    async signup(@Body() body: CreateUserDto): Promise<SignupResponse> {
         return this.service.createUser(body)
+    }
+
+    @Post('/otp-verify')
+    @UsePipes(new ValidationPipe())
+    async verifyOtp(@Body() body: VerifyOtpDto): Promise<VerifyOtpResponse> {
+        return this.service.verify(body)
+    }
+
+    @Post('/resend-otp')
+    @UsePipes(new ValidationPipe())
+    async resendOtp(@Body() body: ResendOtpDto): Promise<ResendOtpResponse> {
+        return this.service.resend(body)
     }
 
     @Post('/signin')
     @UsePipes(new ValidationPipe())
-    async signin(@Body() body: CreateUserDto): Promise<any> {
-        try {
-            return this.service.signin(body)
-        } catch (err) {
-            throw new Error(err.message)
-        }
+    async signin(@Body() body: LoginDto): Promise<SigninResponse> {
+        return this.service.signin(body)
     }
 }
