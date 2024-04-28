@@ -23,18 +23,12 @@ export class UserController {
 
     @Post('/signup')
     @UsePipes(new ValidationPipe())
-    @UsePipes()
     async signup(@Body() body: CreateUserDto): Promise<any> {
-        try {
-            return this.service.createUser(body)
-        } catch (err) {
-            throw new InternalServerErrorException(err)
-        }
+        return this.service.createUser(body)
     }
 
     @Post('/signin')
     @UsePipes(new ValidationPipe())
-    @UsePipes()
     async signin(@Body() body: CreateUserDto): Promise<any> {
         try {
             return this.service.signin(body)
