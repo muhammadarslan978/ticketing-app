@@ -4,7 +4,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 
 console.log(__dirname)
 const ormconfig: PostgresConnectionOptions = {
-    name: 'ticketing_db',
+    name: 'nestjs',
     type: 'postgres',
     username: 'nestjs',
     password: 'nestjs',

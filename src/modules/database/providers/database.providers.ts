@@ -2,6 +2,7 @@ import { INJECTION_TOKEN, REPOSITORY } from '../../../constant'
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { User } from '../entity/user'
+import { Otp } from '../entity/otp'
 
 export const databaseProviders = [
     {
@@ -9,7 +10,7 @@ export const databaseProviders = [
         useFactory: async (): Promise<DataSource> => {
             try {
                 const ormconfig: PostgresConnectionOptions = {
-                    database: 'ticketing_db',
+                    database: 'nestjs',
                     type: 'postgres',
                     username: 'nestjs',
                     password: 'nestjs',
@@ -39,6 +40,13 @@ export const databaseProviders = [
         provide: REPOSITORY.USER_REPOSITORY,
         useFactory: (dataSource: DataSource): Repository<User> => {
             return dataSource.getRepository(User)
+        },
+        inject: [INJECTION_TOKEN.DATA_SOURCE],
+    },
+    {
+        provide: REPOSITORY.OTP_REPOSITORY,
+        useFactory: (dataSource: DataSource): Repository<Otp> => {
+            return dataSource.getRepository(Otp)
         },
         inject: [INJECTION_TOKEN.DATA_SOURCE],
     },

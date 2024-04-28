@@ -1,8 +1,10 @@
 // user.entity.ts
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { USERROLE } from '../../../constant'
-import { Entity, Column, BaseEntity, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
+import { Otp } from './otp'
 
 @Entity()
 export class User extends BaseEntity {
@@ -34,14 +36,17 @@ export class User extends BaseEntity {
     @Column({ nullable: true })
     lastName?: string
 
-    @Column({ default: true })
+    @Column({ default: false })
     isActive: boolean
 
-    @Column({ default: true })
+    @Column({ default: false })
     isVerified: boolean
 
     @Column({ enum: USERROLE, default: USERROLE.USER })
     role: USERROLE
+
+    @OneToMany(() => Otp, (otp) => otp.user, { cascade: true, onDelete: 'CASCADE' }) // Enable cascading and set onDelete to CASCADE
+    otps: Otp[]
 }
 
 export interface IUser {

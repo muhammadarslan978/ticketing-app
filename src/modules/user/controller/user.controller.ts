@@ -39,7 +39,7 @@ export class UserController {
         try {
             return this.service.signin(body)
         } catch (err) {
-            throw new InternalServerErrorException(err)
+            throw new Error(err.message)
         }
     }
 }
