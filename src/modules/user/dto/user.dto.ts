@@ -45,7 +45,7 @@ export class ResendOtpDto {
 export class OtpInputDto {
     @IsString()
     @IsNotEmpty({ message: 'User id is required' })
-    id: string
+    userId: string
 
     @IsNotEmpty({ message: 'Code is required' })
     @IsNumber({}, { message: 'Code must be a numeric value' })

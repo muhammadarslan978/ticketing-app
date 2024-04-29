@@ -52,7 +52,7 @@ export class UserService {
             if (user.isVerified) {
                 throw new HttpException('User already verified', HttpStatus.CONFLICT)
             }
-            await this.otpService.isVarifiedOtp({ id: user.id, code: obj.code })
+            await this.otpService.isVerifiedOtp({ userId: user.id, code: obj.code })
 
             return { message: 'User successfully verified' }
         } catch (err) {
@@ -63,9 +63,14 @@ export class UserService {
         }
     }
 
-    async resend(obj: ResendOtpDto): Promise<ResendOtpResponse> {
+    async resend(data: ResendOtpDto): Promise<ResendOtpResponse> {
         try {
-            return { message: 'User successfully verified' }
+            const user = await this.userRepo.findOne({ where: { email: data.email } })
+            if (!user) {
+                throw new HttpException('Email not found', HttpStatus.CONFLICT)
+            }
+            this.otpService.generateOtp(user.id)
+            return { message: 'Otp sent you your email' }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err
