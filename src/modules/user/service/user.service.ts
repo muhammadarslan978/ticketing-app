@@ -41,7 +41,7 @@ export class UserService {
             }
             // Log and throw a meaningful HTTP exception instead of a generic Error.
             console.error(err) // Log the error for debugging purposes.
-            throw new HttpException('Failed to create user due to internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -64,7 +64,7 @@ export class UserService {
             if (err instanceof HttpException) {
                 throw err
             }
-            throw new HttpException('Failed to create user due to internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -80,7 +80,7 @@ export class UserService {
             if (err instanceof HttpException) {
                 throw err
             }
-            throw new HttpException('Failed to create user due to internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -112,7 +112,7 @@ export class UserService {
             if (err instanceof HttpException) {
                 throw err
             }
-            throw new HttpException('Failed to create user due to internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }

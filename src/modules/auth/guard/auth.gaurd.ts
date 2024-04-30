@@ -1,4 +1,4 @@
-import { Injectable, ExecutionContext } from '@nestjs/common'
+import { Injectable, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common'
 import { Observable } from 'rxjs'
 import { AuthService } from '../service/auth.service'
 import { Reflector } from '@nestjs/core'
@@ -13,8 +13,36 @@ export class JWTAuthGuard extends AuthGuard('jwt') {
         super()
     }
 
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-        return super.canActivate(context)
+    async canActivate(context: ExecutionContext): Promise<boolean> {
+        const request = context.switchToHttp().getRequest()
+        try {
+            const token = this.extractTokenFromHeader(request.headers.authorization)
+            if (!token) {
+                throw new HttpException('Token not provided', HttpStatus.UNAUTHORIZED)
+            }
+            const user = await this.authService.verifyToken(token)
+            if (!user.verify) {
+                throw new HttpException('User not verified yet', HttpStatus.CONFLICT)
+            }
+            request.user = user // Attach the user object to the request
+            return true
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err
+            }
+            throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    private extractTokenFromHeader(authorizationHeader: string): string | null {
+        if (!authorizationHeader) {
+            return null
+        }
+        const parts = authorizationHeader.split(' ')
+        if (parts.length === 2 && parts[0] === 'Bearer') {
+            return parts[1]
+        }
+        return null
     }
 
     // handleRequest<TUser = any>(
